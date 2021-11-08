@@ -347,7 +347,7 @@ class RedditDealsBot:
 
     def GetTimeDeltaString(self, created, check_limit = False, short_string=False):
         if short_string:
-            date_format="%m/%d/%Y.%H:%M"
+            date_format="%m/%d/%y.%H:%M"
             date = datetime.fromtimestamp(created)           
             date = date.astimezone(timezone("US/Pacific"))
             pst_dt = date.strftime(date_format)
