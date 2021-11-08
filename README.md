@@ -28,6 +28,18 @@ In order to get this bot to work, you'll need the following things:
 ## Reddit Account Username
 1. Go to reddit and either create a new account for your bot or use an existing one.
 2. Set the username in `check_for_deals.py` as the value for `username` in the Reddit constructor (line 28).
+3. **IMPORTANT**: This script will listen on whatever subreddits the chosen account is subscribed to.  If you want to make it work as intended, make sure you are subscribed to the following subreddits:
+ - /r/deals
+ - /r/gamedeals
+ - /r/steamdeals
+ - /r/buildapcsales
+ - /r/frugalmalefashion
+ - /r/computerdeals
+ - /r/dealsreddit
+ - /r/amazonspecials
+ - /r/toolsales
+ - /r/nintendoswitchdeals
+ - /r/pcpartsales
 
 ## Reddit Account
 1. Set the password for the chosen account in `check_for_deals.py` as the value for `password` in the Reddit constructor (line 26).
@@ -45,3 +57,6 @@ In order to get this bot to work, you'll need the following things:
 Once  you've completed the setup, all you need to do is run the script. This script is setup to run on Python 3+ in a Linux environment.  For Windows, there is one minor adjustment that needs to be made:
 
 - Remove the shebang on the first line (`#!/usr/bin/python3`).  It's not needed for Windows.
+
+# Contact
+If you have any suggestions or questions, contact /u/kn0wmad1c by emailing matt at formica dot dev.
