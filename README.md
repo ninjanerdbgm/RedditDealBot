@@ -59,4 +59,4 @@ Once  you've completed the setup, all you need to do is run the script. This scr
 - Remove the shebang on the first line (`#!/usr/bin/python3`).  It's not needed for Windows.
 
 # Contact
-If you have any suggestions or questions, contact /u/kn0wmad1c by emailing matt at formica dot dev.
+If you have any suggestions or questions, contact [/u/kn0wmad1c](https://www.reddit.com/user/Kn0wmad1c/) by emailing matt at formica dot dev.
