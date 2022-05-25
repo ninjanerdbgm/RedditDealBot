@@ -23,7 +23,7 @@ class RedditDealsBot:
         self.reddit = Reddit(
                         client_id = "",
                         client_secret = "",
-                        password = ",
+                        password = "",
                         user_agent = "DealsChecker Bot by /u/kn0wmad1c",
                         username = ""
                       )
@@ -35,7 +35,7 @@ class RedditDealsBot:
         self.match = None
         self.match_limit = 10 # in minutes
         self.userdata = {}
-        self.rand_nums = [23, 42, 77, 90, 8] # Can be anything
+        self.rand_nums = [23, 42, 77, 90, 8]
         self.init = True
 
     def send_typing_action(func):
@@ -53,12 +53,12 @@ class RedditDealsBot:
             update.message.reply_text("Add what?")
             return
 
-        print(f"{update.message.from_user.first_name} {update.message.from_user.last_name} is trying to add {context.args[0]} to the list...".replace(" None", ""))
+        item_to_add = " ".join(context.args[0:])
+
+        print(f"[{self.GetTimeInPST()}] ::: {update.message.from_user.first_name} {update.message.from_user.last_name} is trying to add {item_to_add} to the list...".replace(" None", ""))
 
         cur_list = context.user_data.get("game_list", "not found")
         if cur_list == "not found": cur_list = self.game_list
-
-        item_to_add = " ".join(context.args[0:])
 
         if "," in item_to_add:
             try:
@@ -68,7 +68,7 @@ class RedditDealsBot:
                 # Update file
                 #self.loop.run_until_complete(self.UpdateQueryList())
 
-                print("Update complete.")
+                print(f"[{self.GetTimeInPST()}] ::: Update complete.")
                 message = "Added all to the list."
 
                 update.message.reply_text(text=message, parse_mode=telegram.ParseMode.HTML)
@@ -86,7 +86,7 @@ class RedditDealsBot:
                 # Update file
                 #self.loop.run_until_complete(self.UpdateQueryList())
 
-                print("Update complete")
+                print(f"[{self.GetTimeInPST()}] ::: Update complete")
                 message = f"Added {item_to_add.strip()} to the list."
 
                 update.message.reply_text(text=message, parse_mode=telegram.ParseMode.HTML)
@@ -108,12 +108,12 @@ class RedditDealsBot:
             updater.message.reply_text("Remove what?")
             return
 
-        print(f"{updater.message.from_user.first_name} {updater.message.from_user.last_name} is trying to remove {context.args[0]} from their list...".replace(" None", ""))
+        item_to_remove = " ".join(context.args[0:])
+
+        print(f"[{self.GetTimeInPST()}] ::: {updater.message.from_user.first_name} {updater.message.from_user.last_name} is trying to remove {item_to_remove} from their list...".replace(" None", ""))
 
         cur_list = context.user_data.get("game_list", "not found")
         if cur_list == "not found": cur_list = self.game_list
-
-        item_to_remove = " ".join(context.args[0:])
 
         if "," in item_to_remove:
             # Remove from list
@@ -126,7 +126,7 @@ class RedditDealsBot:
                     message = f"{message}{rem_list}\n-----"
 
                     updater.message.reply_text(text=message, parse_mode=telegram.ParseMode.HTML)
-                    print("Update complete.")
+                    print(f"[{self.GetTimeInPST()}] ::: Update complete.")
                     context.user_data["game_list"] = cur_list
                     context.user_data["name"] = f"{updater.message.from_user.first_name} {updater.message.from_user.last_name}".replace(" None", "")
                 except:
@@ -148,7 +148,7 @@ class RedditDealsBot:
             try:
                 cur_list.remove(item_to_remove)
 
-                print("Update complete.")
+                print(f"[{self.GetTimeInPST()}] ::: Update complete.")
                 message = f"Removed {item_to_remove} from the list."
     
                 updater.message.reply_text(text=message, parse_mode=telegram.ParseMode.HTML)
@@ -172,14 +172,14 @@ class RedditDealsBot:
 
     @send_typing_action
     def RemoveAll(self, update, context):
-        print(f"{update.message.from_user.first_name} {update.message.from_user.last_name} is trying to remove all items from their list...".replace(" None", ""))
+        print(f"[{self.GetTimeInPST()}] ::: {update.message.from_user.first_name} {update.message.from_user.last_name} is trying to remove all items from their list...".replace(" None", ""))
 
         cur_list = context.user_data.get("game_list", "not found")
         if cur_list == "not found": cur_list = self.game_list
 
         cur_list.clear()
 
-        print("Update complete.")
+        print(f"[{self.GetTimeInPST()}] ::: Update complete.")
         message = f"@{update.message.from_user.first_name}: Removed all items from your list."
 
         update.message.reply_text(text=message, parse_mode=telegram.ParseMode.HTML)
@@ -188,7 +188,7 @@ class RedditDealsBot:
 
     @send_typing_action
     def DisplayHelp(self, update, context):
-        print(f"{update.message.from_user.first_name} {update.message.from_user.last_name} is requesting help...".replace(" None", ""))
+        print(f"[{self.GetTimeInPST()}] ::: {update.message.from_user.first_name} {update.message.from_user.last_name} is requesting help...".replace(" None", ""))
 
         message = f"Hiya, {update.message.from_user.first_name}!  Here's a list of the current commands and what they do:\n\n"
         message = f"{message}<b>/start</b>\n"
@@ -216,7 +216,7 @@ class RedditDealsBot:
 
     @send_typing_action
     def ListSubreddits(self, update, context):
-        print(f"{update.message.from_user.first_name} {update.message.from_user.last_name} is requesting the list of subreddits".replace(" None", ""))
+        print(f"[{self.GetTimeInPST()}] ::: {update.message.from_user.first_name} {update.message.from_user.last_name} is requesting the list of subreddits".replace(" None", ""))
 
         subscribed = list(self.reddit.user.subreddits(limit=None))
         sub_list = "\n".join(sub.display_name for sub in subscribed)
@@ -228,7 +228,7 @@ class RedditDealsBot:
 
     @send_typing_action
     def DisplayList(self, update, context):
-        print(f"{update.message.from_user.first_name} {update.message.from_user.last_name} is requesting the list of items...".replace(" None", ""))
+        print(f"[{self.GetTimeInPST()}] ::: {update.message.from_user.first_name} {update.message.from_user.last_name} is requesting the list of items...".replace(" None", ""))
 
         cur_list = context.user_data.get("game_list", "not found")
         if cur_list == "not found": cur_list = self.game_list
@@ -243,7 +243,7 @@ class RedditDealsBot:
 
     @send_typing_action
     def ListSuggestedTags(self, update, context):
-        print(f"{update.message.from_user.first_name} {update.message.from_user.last_name} is requesting a list of suggested adds...".replace(" None", ""))
+        print(f"[{self.GetTimeInPST()}] ::: {update.message.from_user.first_name} {update.message.from_user.last_name} is requesting a list of suggested adds...".replace(" None", ""))
 
         message = f"Hi, {update.message.from_user.first_name}!\nHere are some suggestions you may want to add to your list:\n-----\n"
         message = f"{message}<b>Video Games</b>\n[Steam]\n[Green Man Gaming]\n[GameStop]\n[eShop/US]\n\n"
@@ -263,7 +263,7 @@ class RedditDealsBot:
             item_to_remove = query.data.split("rem ")[1]
 
             # Remove an item
-            print(f"Attempting to remove {item_to_remove}")
+            print(f"[{self.GetTimeInPST()}] ::: Attempting to remove {item_to_remove}")
             context.args = [item_to_remove]
             self.RemoveItemFromList(update, context)
         elif "stats" in query.data:
@@ -281,11 +281,11 @@ class RedditDealsBot:
     def RegisterName(self, update, context):
         if context.user_data["name"] is not None: return
 
-        print(f"Registering {update.message.from_user.first_name} {update.message.from_user.last_name}.".replace(" None", ""))
+        print(f"[{self.GetTimeInPST()}] ::: Registering {update.message.from_user.first_name} {update.message.from_user.last_name}.".replace(" None", ""))
         context.user_data["name"] = f"{update.message.from_user.first_name} {update.message.from_user.last_name}".replace(" None", "")
 
     def StartBot(self, update, context):
-        print(f"{update.message.from_user.first_name} {update.message.from_user.last_name} is starting a bot session...".replace(" None", ""))
+        print(f"[{self.GetTimeInPST()}] ::: {update.message.from_user.first_name} {update.message.from_user.last_name} is starting a bot session...".replace(" None", ""))
 
         cur_list = context.user_data.get("game_list", "not found")
         if cur_list == "not found": 
@@ -390,7 +390,7 @@ class RedditDealsBot:
 
     def InitDone(self):
         sleep(10)
-        print("Init done.")
+        print(f"[{self.GetTimeInPST()}] ::: Init done.")
         self.init = False
 
     def UpdatePost(self, submission, message, inline_id):
@@ -406,18 +406,18 @@ class RedditDealsBot:
             pass
 
     async def GetQueryList(self):
-        print("Getting query list.")
+        print(f"[{self.GetTimeInPST()}] ::: Getting query list.")
         async with aiofiles.open("games","r") as f:
             for line in await f.readlines():
                 self.game_list.append(line.strip())
 
     async def UpdateQueryList(self):
-        print("Updating query list.")
+        print(f"[{self.GetTimeInPST()}] ::: Updating query list.")
         async with aiofiles.open("games","w") as file:
             file.seek(0)
             file.write(f"{(item.strip() for item in self.game_list)}\r\n")
             file.close()
-        print("Done")    
+        print(f"[{self.GetTimeInPST()}] ::: Done")    
 
     async def ConstructTelegramMessage(self, submission, timedelta_text, user_id):
         if "$" in submission.title and "$0" not in submission.title and self.match is not None:
@@ -454,7 +454,7 @@ class RedditDealsBot:
             try:
                 self.telegram.send_message(chat_id=user_id, text=message, parse_mode=telegram.ParseMode.HTML, timeout=15, reply_markup=reply_markup)
             except AttributeError as e:
-                print(f"Unable to send message as intended: {type(e).__name__} ::: {e}")
+                print(f"[{self.GetTimeInPST()}] ::: Unable to send message as intended: {type(e).__name__} ::: {e}")
                 traceback.print_exc()
             except Exception as e:
                 message = f"{message}\n----------\n<b>If you want to get these in a private message instead, start a chat with @RedditDealBot directly.</b>"
@@ -466,12 +466,12 @@ class RedditDealsBot:
         loop.run_until_complete(self.GetQueryList())
 
         # Get the subs that the bot is joined to
-        print("Building multi-reddit...")
+        print(f"[{self.GetTimeInPST()}] ::: Building multi-reddit...")
         subscribed = list(self.reddit.user.subreddits(limit=None))
         subscribed_as_string = "+".join(sub.display_name for sub in subscribed)
 
         multireddit = self.reddit.subreddit(subscribed_as_string)
-        print("Done")
+        print(f"[{self.GetTimeInPST()}] ::: Done")
 
         try:
             thread = Thread(target=self.InitDone)    
@@ -488,7 +488,7 @@ class RedditDealsBot:
 
                 for user in self.userdata.items():
                     if user[1]["game_list"] is None: continue
-                    if any(phrase.strip().lower() in submission.title.lower() and self.SetMatch(phrase.strip()) for phrase in user[1]["game_list"]):
+                    if any((phrase.strip().lower() in submission.title.lower() or phrase.strip().lower() in submission.selftext.lower()) and self.SetMatch(phrase.strip()) for phrase in user[1]["game_list"]):
                         timedelta_text = self.GetTimeDeltaString(submission.created_utc, True)                        
                         if not timedelta_text: continue
 
@@ -507,10 +507,15 @@ class RedditDealsBot:
 
                 if not found_match:
                     timedelta_text = self.GetTimeDeltaString(submission.created_utc)
-                    print(f"{('RANDOM DISPLAY: ' if randomly_sent_to_chat else '')}/r/{submission.subreddit.display_name} => {submission.title}, posted {timedelta_text}")
-        
+                    print(f"{('RANDOM DISPLAY: ' if randomly_sent_to_chat else '')}/r/{submission.subreddit.display_name} => {submission.title}, posted {timedelta_text}")        
+        except telegram.error.NetworkError as e:
+            print(f"[{self.GetTimeInPST()}] ::: Network Error: {e}")
+            print(f"[{self.GetTimeInPST()}] ::: Retrying in 60 seconds...")
+            sleep(60)
+            self.init = True
+            self.ListenForDeals()
         except Exception as e:
-            print(f"Error in reddit stream: {e}")
+            print(f"[{self.GetTimeInPST()}] ::: Error in reddit stream: {e}")
             sleep(60)
             self.init = True
             self.ListenForDeals()
